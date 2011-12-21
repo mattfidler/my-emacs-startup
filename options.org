@@ -1,0 +1,102 @@
+#+TITLE: My Personal Options
+#+AUTHOR: Matthew L. Fidler
+* Keyboard Bindings
+** Ergoemacs
+I the colemak keyboard.  I also use ergoemacs.
+#+begin_src emacs-lisp :results silent
+  (require 'ergoemacs-keybindings)
+  (ergoemacs-mode 1)
+  (cua-mode 1)
+  
+#+end_src
+*** Ergoemacs +smex
+To use Ergoemacs with SMEX, Control-A needs to be redefined
+#+BEGIN_SRC emacs-lisp
+  (when (fboundp 'smex)
+    (define-key ergoemacs-keymap "\M-a" 'smex)
+    (define-key ergoemacs-keymap "\M-A" 'smex-major-mode-commands))
+  
+#+END_SRC
+
+*** Ergoemacs -- Please use regular expression searching
+#+BEGIN_SRC emacs-lisp
+  (define-key ergoemacs-keymap [remap isearch-forward] 'isearch-forward-regexp)
+  (define-key ergoemacs-keymap [remap isearch-backward] 'isearch-backward-regexp)
+#+END_SRC
+
+*** Remove silly Ergoemacs keys.
+I really don't think that =M-x= and =M-c= =M-z= are very useful since
+the control variants do the /exact same thing/.  Silly.
+
+#+BEGIN_SRC emacs-lisp
+  (define-key ergoemacs-keymap "\M-c" nil)
+  (define-key ergoemacs-keymap "\M-x" nil)
+  (define-key ergoemacs-keymap "\M-z" nil)
+#+END_SRC
+
+Also this interferes with ESS-tracebug's default prefix key of =\M-c=
+
+* Things I use
+This is a list of the things that I use and would like to load:
+#+begin_src emacs-lisp
+  (mapc
+   (lambda(item)
+     (starter-kit-load (concat "starter-kit-" item ".org")))
+   (list
+    "lisp" "eshell" "ess" "org" "nxhtml" "cygwin" "latex"))
+  
+#+end_src
+
+* Misc
+** User Name
+I like to have my user-name set.  It fixes some issues in Emacs.
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Matthew L. Fidler")
+(setq user-mail-address "matthew.fidler@gmail.com")
+#+END_SRC
+** RefTeX
+I'm setting my ref-TeX to my database of articles
+#+BEGIN_SRC emacs-lisp
+  (setq reftex-default-bibliograph '("~/Work/Articles/generalOcular.bib"))
+#+END_SRC
+* IDO hacks
+See http://www.emacswiki.org/emacs/InteractivelyDoThings
+** Display Completions Vertically
+#+BEGIN_SRC emacs-lisp
+  (setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
+  
+  (defun ido-disable-line-trucation () (set (make-local-variable 'truncate-lines) nil))
+  (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
+#+END_SRC
+
+
+** Sort files by modification time
+#+BEGIN_SRC emacs-lisp
+  ;; sort ido filelist by mtime instead of alphabetically
+  (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
+  (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
+  (defun ido-sort-mtime ()
+    (setq ido-temp-list
+          (sort ido-temp-list 
+                (lambda (a b)
+                  (time-less-p
+                   (sixth (file-attributes (concat ido-current-directory b)))
+                   (sixth (file-attributes (concat ido-current-directory a)))))))
+    (ido-to-end  ;; move . files to end (again)
+     (delq nil (mapcar
+                (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+                ido-temp-list))))
+#+END_SRC
+
+** Preventing auto-searches unless called explicitly
+#+BEGIN_SRC emacs-lisp
+  ;; disable auto searching for files unless called explicitly
+  (setq ido-auto-merge-delay-time 99999)
+  
+  (define-key ido-file-dir-completion-map (kbd "C-c C-s") 
+    (lambda() 
+      (interactive)
+      (ido-initiate-auto-merge (current-buffer))))
+#+END_SRC
+
+* Testing Out
