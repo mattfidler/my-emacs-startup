@@ -1346,6 +1346,13 @@ applications.
 
 =C-c C-x C-d= also provides a quick summary of clocked time for the
 current org file.
+** Don't spend too much time!
+Try not to spend too much time on any one task. Therefore when you are
+over your estimated time sound an alert.
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-sound (expand-file-name "~init/shared/bang_6.wav"))
+#+END_SRC
+
 * Org-mode options
 ** Handling blank lines
 
