@@ -6,7 +6,8 @@
         (list 'magit 'xahk-mode 'yaoddmuse 'textmate-to-yas 'w32-browser 'setup-cygwin
           'smex 'r-autoyas 'ntcmd 'org-table-comment 'lib-requires 'linum-off
           'fold-dwim-org 'fold-dwim 'ess-smart-underscore 'el-autoyas 'cygwin-mount
-          'auto-complete 'ac-R 'json 'org-cua-dwim 'nsis-mode 'ido-ubiquitous
+          'auto-complete 'ac-R 'json 'org-cua-dwim 'nsis-mode
+          'ido-ubiquitous 'ergoemacs-keybindings
           'auto-indent-mode))
   
   (dolist (package my-lisp-packages)
@@ -20,9 +21,10 @@
 ** Ergoemacs
 I the colemak keyboard.  I also use ergoemacs.
 #+begin_src emacs-lisp :results silent
-  (require 'ergoemacs-keybindings)
-  (ergoemacs-mode 1)
-  (cua-mode 1)
+  (require 'ergoemacs-keybindings nil t)
+  (when (featurep 'ergoemacs-keybindings)
+    (ergoemacs-mode 1)
+    (cua-mode 1))
   
 #+end_src
 *** Ergoemacs +smex
