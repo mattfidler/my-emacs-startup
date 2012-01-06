@@ -1,5 +1,21 @@
 #+TITLE: My Personal Options
 #+AUTHOR: Matthew L. Fidler
+* ELPA Packages I use
+#+begin_src emacs-lisp
+  (setq my-lisp-packages
+        (list 'magit 'xahk-mode 'yaoddmuse 'textmate-to-yas 'w32-browser 'setup-cygwin
+          'smex 'r-autoyas 'ntcmd 'org-table-comment 'lib-requires 'linum-off
+          'fold-dwim-org 'fold-dwim 'ess-smart-underscore 'el-autoyas 'cygwin-mount
+          'auto-complete 'ac-R 'json 'org-cua-dwim 'nsis-mode 'ido-ubiquitous
+          'auto-indent-mode))
+  
+  (dolist (package my-lisp-packages)
+    (unless (package-installed-p package)
+      (condition-case err
+          (package-install package)
+        (error (message "%s" err)))))
+  
+#+end_src
 * Keyboard Bindings
 ** Ergoemacs
 I the colemak keyboard.  I also use ergoemacs.
@@ -62,6 +78,7 @@ I'm setting my ref-TeX to my database of articles
 * IDO hacks
 See http://www.emacswiki.org/emacs/InteractivelyDoThings
 ** Display Completions Vertically
+I like the look.  I don't like the arrow keys not doing what I expect...
 #+BEGIN_SRC emacs-lisp
   (setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
   
@@ -69,24 +86,6 @@ See http://www.emacswiki.org/emacs/InteractivelyDoThings
   (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-trucation)
 #+END_SRC
 
-
-** Sort files by modification time
-#+BEGIN_SRC emacs-lisp
-  ;; sort ido filelist by mtime instead of alphabetically
-  (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
-  (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
-  (defun ido-sort-mtime ()
-    (setq ido-temp-list
-          (sort ido-temp-list 
-                (lambda (a b)
-                  (time-less-p
-                   (sixth (file-attributes (concat ido-current-directory b)))
-                   (sixth (file-attributes (concat ido-current-directory a)))))))
-    (ido-to-end  ;; move . files to end (again)
-     (delq nil (mapcar
-                (lambda (x) (and (char-equal (string-to-char x) ?.) x))
-                ido-temp-list))))
-#+END_SRC
 
 ** Preventing auto-searches unless called explicitly
 #+BEGIN_SRC emacs-lisp
@@ -97,6 +96,12 @@ See http://www.emacswiki.org/emacs/InteractivelyDoThings
     (lambda() 
       (interactive)
       (ido-initiate-auto-merge (current-buffer))))
+#+END_SRC
+
+* Emacs Speaks NONMEM
+I use esn
+#+BEGIN_SRC emacs-lisp
+  (require 'esn-start nil t)
 #+END_SRC
 
 * Testing Out
