@@ -7,7 +7,7 @@
           'smex 'r-autoyas 'ntcmd 'org-table-comment 'lib-requires 'linum-off
           'fold-dwim-org 'fold-dwim 'ess-smart-underscore 'el-autoyas 'cygwin-mount
           'auto-complete 'ac-R 'json 'org-cua-dwim 'nsis-mode
-          'ido-ubiquitous 'ergoemacs-keybindings
+          'ido-ubiquitous 'ergoemacs-keybindings 'header2 'lib-requires
           'auto-indent-mode))
   
   (dolist (package my-lisp-packages)
@@ -64,6 +64,21 @@ This is a list of the things that I use and would like to load:
     "lisp" "eshell" "ess" "org" "nxhtml" "cygwin" "latex"))
   
 #+end_src
+
+* Tabbar-ruler
+I want the tool-bar to be a popup ruler.  That is it only shows when
+you move your ruler to the top of the frame.  
+#+BEGIN_SRC emacs-lisp
+  (setq tabbar-ruler-global-tabbar 't) ; If you want tabbar
+  (setq tabbar-ruler-global-ruler 't) ; if you want a global ruler
+  (setq tabbar-ruler-popup-menu 't) ; If you want a popup menu.
+  (setq tabbar-ruler-popup-toolbar 't) ; If you want a popup toolbar
+#+END_SRC
+
+* Header2
+#+BEGIN_SRC emacs-lisp
+(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
+#+END_SRC
 
 * Misc
 ** User Name

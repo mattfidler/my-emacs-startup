@@ -1,5 +1,18 @@
 #+TITLE: My Org-mode setup
 #+AUTHOR: Matthew L. Fidler
+* Required Packages
+Install packages if they are not present.
+#+begin_src emacs-lisp
+  (setq my-lisp-packages
+        (list 'org-outlook))
+  
+  (dolist (package my-lisp-packages)
+    (unless (package-installed-p package)
+      (condition-case err
+          (package-install package)
+        (error (message "%s" err)))))
+  
+#+end_src
 * Getting Started
 This is my take based on reading http://doc.norang.ca/org-mode.html
 Tasks are separated into logical groupings/projects.  For large task
@@ -63,8 +76,9 @@ emacs:
   (define-key ergoemacs-keymap (kbd "M-,") 'org-clock-goto)
   (define-key ergoemacs-keymap (kbd "M-C-,") 'org-clock-in)
   (define-key ergoemacs-keymap (kbd "M-<") 'bh/clock-in-last-task)
-  (define-key ergoemacs-keymap (kbd "<f9> I") 'bh/punch-in)
-  (define-key ergoemacs-keymap (kbd "<f9> O") 'bh/punch-out)
+  (define-key ergoemacs-keymap (kbd "M-b") 'mlf/punch-in-or-out) 
+  
+  
 #+END_SRC
   
 * Tasks and States
@@ -653,7 +667,7 @@ I use =outlook-org= to capture information for ms outlook.
 
 #+BEGIN_SRC emacs-lisp
   (when (eq system-type 'windows-nt)
-    (require 'org-outlook))
+    (require 'org-outlook nil t))
   (require 'org-protocol)
   
 #+END_SRC
@@ -892,6 +906,12 @@ I have the following org-mode settings for clocking:
       (goto-char parent-task)
       parent-task))
   
+  (defun mlf/punch-in-or-out (arg)
+    (interactive "p")
+    (if bh/keep-clock-running
+        (bh/punch-out arg)
+      (bh/punch-in arg)))
+  
   (defun bh/punch-in (arg)
     "Start continuous clocking and set the default task to the
   selected task.  If no task is selected set the Organization task
@@ -961,6 +981,7 @@ I have the following org-mode settings for clocking:
       (bh/clock-in-parent-task)))
   
   (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
+  
 #+end_src
 
 I used to clock in tasks by ID using the following function but with
@@ -1383,7 +1404,7 @@ and headings:
   (setq org-blank-before-new-entry (quote ((heading)
                                            (plain-list-item))))
 #+end_src
-** DONE Org mode display files
+** DONE Org mode display image files
 CLOSED: [2011-12-16 Fri 16:59]
 - State "DONE"       from "STARTED"    [2011-12-16 Fri 16:59]
 :LOGBOOK:
@@ -1393,6 +1414,7 @@ CLOCK: [2011-12-16 Fri 16:45]--[2011-12-16 Fri 16:58] =>  0:13
 Using iimage mode, See [[http://orgmode.org/worg/org-configs/org-config-examples.html#sec-2-2][iimage in org]].
 - iimage 
 #+BEGIN_SRC emacs-lisp
+  (require 'iimage)
   (add-to-list 'iimage-mode-image-regex-alist
                (cons (concat "\\[\\[file:\\(~?" iimage-mode-image-filename-regex
                              "\\)\\]")  1))
@@ -1405,8 +1427,23 @@ Using iimage mode, See [[http://orgmode.org/worg/org-configs/org-config-examples
       (set-face-underline-p 'org-link t))
     (iimage-mode))
   (add-hook 'org-mode-hook 'org-toggle-iimage-in-org)
+  
 #+END_SRC
 
+
+** Edit code in a single window
+I use =C-s= to save all the time.  The default org-mode editing
+mechanism changes my window position :(.  Therefore, I prefer to edit
+the org-mode files in the current window.
+#+BEGIN_SRC emacs-lisp
+  (setq org-src-window-setup 'current-window)
+  
+#+END_SRC
+
+** Let =C-w= exit the source code view
+#+BEGIN_SRC emacs-lisp
+(define-key org-src-mode-map "\C-w" 'org-edit-src-exit)
+#+END_SRC
 
 * Org-mode Wish List/Todo List
 ** TODO Make org-clocking save buffer after clocking in.
