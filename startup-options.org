@@ -1,65 +1,33 @@
 #+TITLE: My Personal Options
 #+AUTHOR: Matthew L. Fidler
-* ELPA Packages I use
+* El-get Packages I use
 #+begin_src emacs-lisp
   (setq my-lisp-packages
-        (list 'magit 'xahk-mode 'yaoddmuse 'textmate-to-yas 'w32-browser 'setup-cygwin
-          'smex 'r-autoyas 'ntcmd 'org-table-comment 'lib-requires 'linum-off
-          'fold-dwim-org 'fold-dwim 'ess-smart-underscore 'el-autoyas 'cygwin-mount
-          'auto-complete 'ac-R 'json 'org-cua-dwim 'nsis-mode
-          'ido-ubiquitous 'ergoemacs-keybindings 'header2 'lib-requires
-          'auto-indent-mode))
-  
-  (dolist (package my-lisp-packages)
-    (unless (package-installed-p package)
-      (condition-case err
-          (package-install package)
-        (error (message "%s" err)))))
+        (list 'magit  'textmate-to-yas 'ess 'yaoddmuse 'w32-browser 'ntcmd
+              'org-table-comment  'ess-smart-underscore 'el-autoyas
+              'org-cua-dwim 'nsis-mode 'ido-ubiquitous 'ergoemacs-keybindings
+              'lib-requires 'ssh))
+  ;; 'header2
+  ;; 'ac-R
+  ;; 'xahk-mode  'ntcmd  'lib-requires 'linum-off
+  ;;'fold-dwim-org 'fold-dwim  'el-autoyas 'cygwin-mount
+  ;;'ac-R  'marmalade
+  ;; 'sumatra-forward
+  ;; 'clojure-mode
+  ;; 'org-outlook
+  ;; 'auctex
+  ;; 'smart-operator
+  (el-get 'sync my-lisp-packages)
   
 #+end_src
 * Keyboard Bindings
-** Ergoemacs
-I the colemak keyboard.  I also use ergoemacs.
-#+begin_src emacs-lisp :results silent
-  (require 'ergoemacs-keybindings nil t)
-  (when (featurep 'ergoemacs-keybindings)
-    (ergoemacs-mode 1)
-    (cua-mode 1))
-  
-#+end_src
-*** Ergoemacs +smex
-To use Ergoemacs with SMEX, Control-A needs to be redefined
-#+BEGIN_SRC emacs-lisp
-  (when (fboundp 'smex)
-    (define-key ergoemacs-keymap "\M-a" 'smex)
-    (define-key ergoemacs-keymap "\M-A" 'smex-major-mode-commands))
-  
-#+END_SRC
-
-*** Ergoemacs -- Please use regular expression searching
-#+BEGIN_SRC emacs-lisp
-  (define-key ergoemacs-keymap [remap isearch-forward] 'isearch-forward-regexp)
-  (define-key ergoemacs-keymap [remap isearch-backward] 'isearch-backward-regexp)
-#+END_SRC
-
-*** Remove silly Ergoemacs keys.
-I really don't think that =M-x= and =M-c= =M-z= are very useful since
-the control variants do the /exact same thing/.  Silly.
-
-#+BEGIN_SRC emacs-lisp
-  (define-key ergoemacs-keymap "\M-c" nil)
-  (define-key ergoemacs-keymap "\M-x" nil)
-  (define-key ergoemacs-keymap "\M-z" nil)
-#+END_SRC
-
-Also this interferes with ESS-tracebug's default prefix key of =\M-c=
 
 * Things I use
 This is a list of the things that I use and would like to load:
 #+begin_src emacs-lisp
   (mapc
    (lambda(item)
-     (starter-kit-load (concat "starter-kit-" item ".org")))
+     (kicker-load (concat "kicker-" item ".org")))
    (list
     "lisp" "eshell" "ess" "org" "nxhtml" "cygwin" "latex"))
   
@@ -120,5 +88,26 @@ I use esn
 #+BEGIN_SRC emacs-lisp
   (require 'esn-start nil t)
 #+END_SRC
+* Emacs Speaks Statistics
+I use ssh for remote access.  However, I want to use plink if on
+windows
+#+BEGIN_SRC emacs-lisp
+  (when (getenv "GIT_SSH")
+    (setq ssh-program (getenv "GIT_SSH")))
+#+END_SRC
 
 * Testing Out
+** Marmalade
+I need to set the default server....
+#+BEGIN_SRC emacs-lisp
+  (setq marmalade-server "http://marmalade-repo.org/")
+#+END_SRC
+
+* Ssh when in windows
+When in windows use putty instead of ssh for the ssh package.
+#+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'windows-nt)
+    (setq ssh-program "plink"))
+  
+#+END_SRC
+
