@@ -1445,6 +1445,17 @@ the org-mode files in the current window.
 (define-key org-src-mode-map "\C-w" 'org-edit-src-exit)
 #+END_SRC
 
+** Over the top Saving of Org-buffers.
+   I would like refile to save the buffer
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-after-refile-insert-hook 'save-buffer)
+(add-hook 'org-capture-after-finalize-hook 'save-buffer)
+(defadvice org-refile (around save-after-refile)
+  ad-do-it
+  (save-buffer))
+(ad-activate 'org-refile)
+#+END_SRC
+
 * Org-mode Wish List/Todo List
 ** TODO Make org-clocking save buffer after clocking in.
 [2011-12-15 Thu 15:19]

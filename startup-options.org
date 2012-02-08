@@ -3,16 +3,33 @@
 * El-get Packages I use
 #+begin_src emacs-lisp
   (setq my-lisp-packages
-        (list 'magit  'textmate-to-yas 'ess 'yaoddmuse 'w32-browser 'ntcmd
-              'org-table-comment  'ess-smart-underscore 'el-autoyas
-              'org-cua-dwim 'nsis-mode 'ido-ubiquitous 'ergoemacs-keybindings
-              'lib-requires 'ssh))
-  ;; 'header2
-  ;; 'ac-R
-  ;; 'xahk-mode  'ntcmd  'lib-requires 'linum-off
+        (list
+         'el-autoyas
+         'ergoemacs-keybindings
+         'ess
+         'ess-smart-underscore
+         'header2
+         'hideshow-org
+         'ido-ubiquitous
+         'lib-requires
+         'linum-off
+         'magit
+         'magithub
+         'nsis-mode
+         'ntcmd
+         'org-cua-dwim
+         'org-table-comment
+         'smart-operator
+         'ssh
+         'sumatra-forward
+         'textmate-to-yas
+         'w32-browser
+         'xahk-mode
+         'yaoddmuse
+         ))
   ;;'fold-dwim-org 'fold-dwim  'el-autoyas 'cygwin-mount
   ;;'ac-R  'marmalade
-  ;; 'sumatra-forward
+  ;; 
   ;; 'clojure-mode
   ;; 'org-outlook
   ;; 'auctex
