@@ -1,18 +1,5 @@
 #+TITLE: My Org-mode setup
 #+AUTHOR: Matthew L. Fidler
-* Required Packages
-Install packages if they are not present.
-#+begin_src emacs-lisp
-  (setq my-lisp-packages
-        (list 'org-outlook))
-  
-  (dolist (package my-lisp-packages)
-    (unless (package-installed-p package)
-      (condition-case err
-          (package-install package)
-        (error (message "%s" err)))))
-  
-#+end_src
 * Getting Started
 This is my take based on reading http://doc.norang.ca/org-mode.html
 Tasks are separated into logical groupings/projects.  For large task
@@ -1280,7 +1267,7 @@ I use =properties= and =column view= to do project estimates.
 I set up column view globally with the following headlines
 #+begin_src emacs-lisp :tangle yes
   ; Set default column view headings: Task Effort Clock_Summary
-  (setq org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
+  (setq org-columns-default-format "%70ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
 #+end_src
 
 This makes column view show estimated task effort and clocked times
@@ -1455,6 +1442,51 @@ the org-mode files in the current window.
   (save-buffer))
 (ad-activate 'org-refile)
 #+END_SRC
+
+** Handling Bibtex References
+François Lagarde describes what do do in org when [[http://article.gmane.org/gmane.emacs.orgmode/2406/match%3Dbibliography][dealing with a
+bibliography]].  Later, I found a more comprehensive solution at
+[[http://tincman.wordpress.com/2011/01/04/research-paper-management-with-emacs-org-mode-and-reftex/][Research Paper Management with Emacs, org-mode and RefTeX « Mathletic]]
+
+Adapting this to my taste, gives:
+
+#+BEGIN_SRC emacs-lisp
+  (defun org-mode-reftex-setup ()
+    (interactive)
+    (load-library "reftex")
+    (and (buffer-file-name) (file-exists-p (buffer-file-name))
+         (progn
+           ;;enable auto-revert-mode to update reftex when bibtex file changes on disk
+           (global-auto-revert-mode t)
+           (reftex-parse-all)
+           ;;add a custom reftex cite format to insert links
+           (reftex-set-cite-format
+            '((?b . "[[bib:%l][%l-bib]]")
+              (?n . "[[notes:%l][%l-notes]]")
+              (?p . "[[pdf:%l][%l-paper]]")
+              (?t . "%t")
+              (?h . "** %t\n:PROPERTIES:\n:Custom_ID: %l\n:END:\n[[papers:%l][%l-paper]]")))))
+    (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+    (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+  
+  (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+  
+  
+  (defun org-mode-reftex-search ()
+    ;;jump to the notes for the paper pointed to at from reftex search
+    (interactive)
+    (org-open-link-from-string (format "[[notes:%s]]" (reftex-citation t))))
+  
+  (setq org-link-abbrev-alist
+        '(("bib" . "~usb/Documents/Work/Articles/generalOcular.bib::%s")
+          ("notes" . "~usb/Documents/Work/Articles/generalOcular.org::#%s")
+          ("pdf" . "~usb/Documents/Work/Articles/PDF/%s.pdf")))
+  
+#+END_SRC
+
+#+results:
+| (bib . ~usb/Documents/Work/Articles/generalOcular.bib::%s) | (notes . ~usb/Documents/Work/Articles/generalOcular.org::#%s) | (pdf . ~usb/Documents/Work/Articles/PDF/%s.pdf) |
+
 
 * Org-mode Wish List/Todo List
 ** TODO Make org-clocking save buffer after clocking in.
