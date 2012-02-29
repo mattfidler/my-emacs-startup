@@ -4,10 +4,15 @@
 #+begin_src emacs-lisp
   (setq my-lisp-packages
         (list
+         #'sumatra-forward
+         'ace-jump-mode
          'el-autoyas
          'ergoemacs-keybindings
          'ess
          'ess-smart-underscore
+         'expand-region
+         'extend-dnd
+         'git-auto-commit
          'header2
          'hideshow-org
          'ido-ubiquitous
@@ -21,7 +26,6 @@
          'org-table-comment
          'smart-operator
          'ssh
-         'sumatra-forward
          'textmate-to-yas
          'w32-browser
          'xahk-mode
@@ -111,6 +115,8 @@ windows
 #+BEGIN_SRC emacs-lisp
   (when (getenv "GIT_SSH")
     (setq ssh-program (getenv "GIT_SSH")))
+  ;; (eval-after-load 'ess-mode
+  ;;   (require 'ess-smart-underscore))
 #+END_SRC
 
 * Testing Out
@@ -128,3 +134,41 @@ When in windows use putty instead of ssh for the ssh package.
   
 #+END_SRC
 
+* Git auto-commit
+#+BEGIN_SRC emacs-lisp :tangle no
+  (setq max-lisp-eval-depth 100000) ; Get around the max-lisp-eval-depth
+                                    ; problem.  
+  (setq max-specpdl-size 100000) ; Max specpdl size also needed to be increased.
+  (eval-after-load 'git-auto-commit
+    '(progn
+       (setq gac-dir-set
+             `(
+               (,(expand-file-name "~/Journals/"))
+               (,(expand-file-name "~/Origami/"))
+               (,(expand-file-name "~/ly/"))
+               (,(expand-file-name "~/resume/"))
+               (,(expand-file-name "~el-get/ac-R/"))
+               (,(expand-file-name "~el-get/auto-indent-mode/"))
+               (,(expand-file-name "~el-get/el-autoyas.el/"))
+               (,(expand-file-name "~el-get/esn/"))
+               (,(expand-file-name "~el-get/ess-smart-underscore"))
+               (,(expand-file-name "~el-get/extend-dnd"))
+               (,(expand-file-name "~el-get/fold-dwim-org"))
+               (,(expand-file-name "~el-get/guess-tex-master"))
+               (,(expand-file-name "~el-get/nsis-mode"))
+               (,(expand-file-name "~el-get/org-cua-dwim.el"))
+               (,(expand-file-name "~el-get/org-outlook/"))
+               (,(expand-file-name "~el-get/org-table-comment"))
+               (,(expand-file-name "~el-get/r-autoyas"))
+               (,(expand-file-name "~el-get/tabbar-ruler"))
+               (,(expand-file-name "~el-get/textmate-to-yas.el"))
+               (,(expand-file-name "~el-get/yas-jit.el"))
+               (,(expand-file-name "~ep/"))
+               (,(expand-file-name "~kick/"))
+               (,(expand-file-name "~snippets/ess-mode"))
+               (,(expand-file-name "~snippets/org-mode"))
+               (,(expand-file-name "~shared/"))))))
+  
+  (add-hook 'after-save-hook 'gac-commit-file )
+  
+#+END_SRC

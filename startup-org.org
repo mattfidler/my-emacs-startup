@@ -1446,7 +1446,8 @@ the org-mode files in the current window.
 ** Handling Bibtex References
 François Lagarde describes what do do in org when [[http://article.gmane.org/gmane.emacs.orgmode/2406/match%3Dbibliography][dealing with a
 bibliography]].  Later, I found a more comprehensive solution at
-[[http://tincman.wordpress.com/2011/01/04/research-paper-management-with-emacs-org-mode-and-reftex/][Research Paper Management with Emacs, org-mode and RefTeX « Mathletic]]
+[[http://tincman.wordpress.com/2011/01/04/research-paper-management-with-emacs-org-mode-and-reftex/][Research Paper Management with Emacs, org-mode and RefTeX « Mathletic]].
+Combining this with http://orgmode.org/worg/org-faq.html, gives:
 
 Adapting this to my taste, gives:
 
@@ -1456,7 +1457,8 @@ Adapting this to my taste, gives:
     (load-library "reftex")
     (and (buffer-file-name) (file-exists-p (buffer-file-name))
          (progn
-           ;;enable auto-revert-mode to update reftex when bibtex file changes on disk
+           ;;enable auto-revert-mode to update reftex when bibtex file
+           ;;changes on disk
            (global-auto-revert-mode t)
            (reftex-parse-all)
            ;;add a custom reftex cite format to insert links
@@ -1478,9 +1480,9 @@ Adapting this to my taste, gives:
     (org-open-link-from-string (format "[[notes:%s]]" (reftex-citation t))))
   
   (setq org-link-abbrev-alist
-        '(("bib" . "~usb/Documents/Work/Articles/generalOcular.bib::%s")
-          ("notes" . "~usb/Documents/Work/Articles/generalOcular.org::#%s")
-          ("pdf" . "~usb/Documents/Work/Articles/PDF/%s.pdf")))
+        '(("bib" . "~/Articles/generalOcular.bib::%s")
+          ("notes" . "~/Articles/generalOcular.org::#%s")
+          ("pdf" . "~/Articles/PDF/%s.pdf")))
   
 #+END_SRC
 
