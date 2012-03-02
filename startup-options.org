@@ -30,6 +30,9 @@
          'w32-browser
          'xahk-mode
          'yaoddmuse
+         'mark-multiple
+         'expand-region
+         'lilypond
          ))
   ;;'fold-dwim-org 'fold-dwim  'el-autoyas 'cygwin-mount
   ;;'ac-R  'marmalade
@@ -162,7 +165,7 @@ When in windows use putty instead of ssh for the ssh package.
                (,(expand-file-name "~el-get/r-autoyas"))
                (,(expand-file-name "~el-get/tabbar-ruler"))
                (,(expand-file-name "~el-get/textmate-to-yas.el"))
-               (,(expand-file-name "~el-get/yas-jit.el"))
+  ;             (,(expand-file-name "~el-get/yas-jit.el"))
                (,(expand-file-name "~ep/"))
                (,(expand-file-name "~kick/"))
                (,(expand-file-name "~snippets/ess-mode"))
