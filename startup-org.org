@@ -467,6 +467,7 @@ time waiting for it to be generated.
 ** Setup
 
 #+begin_src emacs-lisp :tangle yes
+  (require 'org-habit)
   ;; Do not dim blocked tasks
   (setq org-agenda-dim-blocked-tasks nil)
   

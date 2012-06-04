@@ -33,6 +33,7 @@
          'mark-multiple
          'expand-region
          'lilypond
+         'rebox2
          ))
   ;;'fold-dwim-org 'fold-dwim  'el-autoyas 'cygwin-mount
   ;;'ac-R  'marmalade
@@ -110,7 +111,7 @@ I like the look.  I don't like the arrow keys not doing what I expect...
 * Emacs Speaks NONMEM
 I use esn
 #+BEGIN_SRC emacs-lisp
-  (require 'esn-start nil t)
+;;  (require 'esn-start nil t)
 #+END_SRC
 * Emacs Speaks Statistics
 I use ssh for remote access.  However, I want to use plink if on
@@ -322,3 +323,60 @@ When in windows use putty instead of ssh for the ssh package.
   (add-hook 'after-save-hook 'gac-commit-file )
   
 #+END_SRC
+* Solarized theme
+I prefer the solarized theme http://ethanschoonover.com/solarized
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'custom-theme-load-path (expand-file-name "~src/emacs-color-theme-solarized"))
+#+END_SRC
+* Key Chord mode
+#+BEGIN_SRC emacs-lisp
+  (require 'key-chord)
+  (key-chord-mode 1)
+  (key-chord-define-global "bb" 'ido-switch-buffer)
+#+END_SRC
+* Rebox2
+Modified from [[http://www.emacswiki.org/emacs/rebox2][EmacsWiki: rebox2]]
+#+BEGIN_SRC emacs-lisp
+  (require 'rebox2)
+  
+  (defvar rebox-comment-styles '(21 25 13 111)
+    "List of styles to use in cycling")
+  (make-variable-buffer-local 'rebox-comment-styles)
+  (key-chord-define-global "[;" 'rebox-dwim)
+  (key-chord-define-global "{:" 'rebox-cycle)
+  (defun rebox-comment-always (style)
+    (setq style (rebox-get-style-from-prefix-arg style :ask nil))
+    (if (use-region-p)
+        (progn
+          (rebox-region (region-beginning)
+                        (region-end)
+                        :style style
+                        :refill nil)
+          (deactivate-mark))
+      (rebox-comment :style style
+                     :refill nil)))
+  
+  (defun rebox-comment-cycle (&optional remove-comment)
+    "Sycle through `rebox-comment-styles' and apply each style to the current block.
+  If bound to [\M-;], repeated invocation of [;] key cycles through
+  the list of styles. Any other input exits the loop."
+    (interactive "P")
+    (let* ((comment-auto-fill-only-comments nil)
+           (styles rebox-comment-styles)
+           (ev last-command-event)
+           (com-char  (event-basic-type ev))
+           st)
+      (if (rebox-line-has-comment)
+          (setq styles (cons 111 styles))) ;; first call removes the comment box
+      (setq st (pop styles))
+      (rebox-comment-always st)
+      (while  (eq (event-basic-type (setq ev (read-event))) com-char)
+        (unless styles
+          (setq styles rebox-comment-styles))
+        (setq st (pop styles))
+        (rebox-comment-always st))
+      (push ev unread-command-events)))
+  
+#+END_SRC
+
+
