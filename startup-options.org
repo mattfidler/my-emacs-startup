@@ -378,5 +378,3 @@ Modified from [[http://www.emacswiki.org/emacs/rebox2][EmacsWiki: rebox2]]
       (push ev unread-command-events)))
   
 #+END_SRC
-
-
