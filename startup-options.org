@@ -45,19 +45,6 @@
   (el-get 'sync my-lisp-packages)
   
 #+end_src
-* Keyboard Bindings
-
-* Things I use
-This is a list of the things that I use and would like to load:
-#+begin_src emacs-lisp
-  (mapc
-   (lambda(item)
-     (kicker-load (concat "kicker-" item ".org")))
-   (list
-    "lisp" "eshell" "ess" "org" "nxhtml" "cygwin" "latex"))
-  
-#+end_src
-
 * Tabbar-ruler
 I want the tool-bar to be a popup ruler.  That is it only shows when
 you move your ruler to the top of the frame.  
