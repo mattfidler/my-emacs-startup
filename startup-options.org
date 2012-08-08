@@ -49,15 +49,23 @@
 I want the tool-bar to be a popup ruler.  That is it only shows when
 you move your ruler to the top of the frame.  
 #+BEGIN_SRC emacs-lisp
-  (setq tabbar-ruler-global-tabbar 't) ; If you want tabbar
-  (setq tabbar-ruler-global-ruler 't) ; if you want a global ruler
-  (setq tabbar-ruler-popup-menu 't) ; If you want a popup menu.
-  (setq tabbar-ruler-popup-toolbar 't) ; If you want a popup toolbar
+  (unless (eq system-type 'darwin)
+    (setq tabbar-ruler-global-tabbar 't) ; If you want tabbar
+    (setq tabbar-ruler-global-ruler 't) ; if you want a global ruler
+    (setq tabbar-ruler-popup-menu 't) ; If you want a popup menu.
+    (setq tabbar-ruler-popup-toolbar 't) ; If you want a popup toolbar
+    )
 #+END_SRC
 
 * Header2
 #+BEGIN_SRC emacs-lisp
+
 (add-hook 'emacs-lisp-mode-hook 'auto-make-header)
+#+END_SRC
+
+* Org Readme
+#+BEGIN_SRC emacs-lisp  
+  (load "~el-get/org-readme/org-readme")
 #+END_SRC
 
 * Misc
@@ -365,3 +373,11 @@ Modified from [[http://www.emacswiki.org/emacs/rebox2][EmacsWiki: rebox2]]
       (push ev unread-command-events)))
   
 #+END_SRC
+* Auto-complete mode
+#+BEGIN_SRC emacs-lisp
+  (setq ac-delay 0)
+  (setq ac-auto-show-menu 0)
+  (setq ac-auto-start 1)
+  
+#+END_SRC
+
