@@ -2,6 +2,7 @@
 #+AUTHOR: Matthew L. Fidler
 * El-get Packages I use
 #+begin_src emacs-lisp
+  (ep-rebuild-aliases)
   (setq my-lisp-packages
         (list
          #'sumatra-forward
@@ -43,7 +44,7 @@
   ;; 'auctex
   ;; 'smart-operator
   (el-get 'sync my-lisp-packages)
-  
+  (ep-rebuild-aliases)
 #+end_src
 * Tabbar-ruler
 I want the tool-bar to be a popup ruler.  That is it only shows when
@@ -65,7 +66,7 @@ you move your ruler to the top of the frame.
 
 * Org Readme
 #+BEGIN_SRC emacs-lisp  
-  (load "~el-get/org-readme/org-readme")
+  (require 'org-readme nil t)
 #+END_SRC
 
 * Misc
@@ -269,7 +270,7 @@ included a modified version here:
 ** Marmalade
 I need to set the default server....
 #+BEGIN_SRC emacs-lisp
-  (setq marmalade-server "http://marmalade-repo.org/")
+  (setq marmalade-server "http://marmalade-repo.org")
 #+END_SRC
 
 * Ssh when in windows
